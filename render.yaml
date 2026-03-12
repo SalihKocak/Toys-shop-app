@@ -1,0 +1,21 @@
+# Render: Web Service - Root Directory = repo root (veya Dockerfile/composer.json olan klasör)
+services:
+  - type: web
+    name: toyshop-app
+    runtime: docker
+    plan: free
+    autoDeploy: true
+    healthCheckPath: /healthz
+    envVars:
+      - key: APP_ENV
+        value: production
+      - key: APP_URL
+        sync: false
+        # Canlı URL'i Render Dashboard'da gir (örn. https://toyshop-app.onrender.com)
+      - key: SESSION_NAME
+        value: toyshop_session
+      - key: MONGODB_URI
+        sync: false
+        # MongoDB Atlas connection string
+      - key: MONGODB_DB
+        value: toyshop_app

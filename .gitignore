@@ -1,0 +1,14 @@
+/vendor/
+.env
+/public/uploads/*
+!/public/uploads/.gitkeep
+!/public/uploads/AaGörseller/**
+!/public/uploads/product-images/**
+!/public/uploads/demo-*.jpg
+!/public/uploads/demo-*.jpeg
+!/public/uploads/demo-*.png
+!/public/uploads/demo-*.webp
+/storage/logs/*
+!/storage/logs/.gitkeep
+/storage/sessions/*
+composer.lock

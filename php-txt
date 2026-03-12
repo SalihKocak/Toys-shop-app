@@ -1,0 +1,12 @@
+
+Admin:
+  E-posta: admin123@gmail.com
+  Şifre: admin123
+
+Örnek kullanıcılar (8 adet, hepsi giriş/çıkış yapabilir):
+  E-posta: demo1@toyshop.local ... demo8@toyshop.local
+  Şifre: user123 (hepsi aynı)
+
+http://localhost:8000
+php -S localhost:8000 -t public
+php scripts/seed.php

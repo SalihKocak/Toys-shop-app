@@ -1,0 +1,14 @@
+.git
+.gitignore
+.env
+.env.example
+storage/logs/*
+public/uploads/*
+vendor
+node_modules
+README.md
+docs
+composer.phar
+php-txt
+rules.json
+src/public

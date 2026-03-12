@@ -1,0 +1,136 @@
+{
+    "project": {
+      "name": "ToyShop",
+      "stack": ["php", "html", "css", "javascript", "mongodb"],
+      "runtime": {
+        "php_version": "8.2",
+        "server": "php -S localhost:8000 -t public"
+      }
+    },
+    "security": {
+      "secrets_policy": {
+        "never_hardcode_secrets": true,
+        "use_env_file": true,
+        "required_env_keys": ["APP_ENV", "APP_URL", "SESSION_NAME", "MONGODB_URI", "MONGODB_DB"],
+        "denylist_patterns": [
+          "mongodb\\+srv://.*:.*@",
+          "BEGIN PRIVATE KEY",
+          "AWS_SECRET_ACCESS_KEY",
+          "OPENAI_API_KEY"
+        ]
+      },
+      "auth": {
+        "password_hashing": "password_hash",
+        "password_verify": "password_verify",
+        "session_based_auth": true,
+        "roles": ["customer", "admin"]
+      }
+    },
+    "architecture": {
+      "pattern": "mvc",
+      "routing": "simple_router",
+      "rendering": "php_views",
+      "folders": {
+        "public": "public entry, assets, uploads",
+        "src": "app code",
+        "src/Controllers": "route handlers",
+        "src/Middleware": "auth + role middleware",
+        "src/Services": "business logic",
+        "src/Infrastructure": "db + logging + env",
+        "src/Views": "php templates",
+        "storage/logs": "application logs",
+        "scripts": "seed + maintenance scripts"
+      }
+    },
+    "database": {
+      "type": "mongodb_atlas",
+      "driver": "mongodb/mongodb",
+      "collections": [
+        "users",
+        "products",
+        "orders",
+        "chat_threads",
+        "chat_messages"
+      ],
+      "indexes": [
+        { "collection": "chat_threads", "keys": { "status": 1, "lastMessageAt": -1 } },
+        { "collection": "chat_messages", "keys": { "threadId": 1, "createdAt": 1 } },
+        { "collection": "products", "keys": { "isActive": 1, "createdAt": -1 } }
+      ]
+    },
+    "features": {
+      "ecommerce_core": {
+        "public_pages": ["home", "products_list", "product_detail", "cart", "checkout"],
+        "cart_storage": "php_session",
+        "orders": {
+          "use_snapshots": true,
+          "status_enum": ["created", "paid", "shipped", "cancelled"]
+        }
+      },
+      "admin_panel": {
+        "pages": ["login", "dashboard", "products_crud", "orders_list", "live_chat"],
+        "product_crud": ["create", "read", "update", "delete"],
+        "image_upload": {
+          "enabled": true,
+          "upload_dir": "public/uploads",
+          "allowed_ext": ["jpg", "jpeg", "png", "webp"],
+          "max_size_mb": 5
+        }
+      },
+      "live_support_chat": {
+        "priority": "high",
+        "realtime_strategy": "ajax_polling",
+        "poll_interval_ms": 2000,
+        "endpoints": {
+          "customer": [
+            { "method": "POST", "path": "/chat/start" },
+            { "method": "GET", "path": "/chat/poll" },
+            { "method": "POST", "path": "/chat/send" }
+          ],
+          "admin": [
+            { "method": "GET", "path": "/admin/chats" },
+            { "method": "GET", "path": "/admin/chats/{id}" },
+            { "method": "POST", "path": "/admin/chats/{id}/send" },
+            { "method": "POST", "path": "/admin/chats/{id}/close" }
+          ]
+        },
+        "response_contract": {
+          "success": { "ok": true, "data": "any" },
+          "error": { "ok": false, "error": { "code": "string", "message": "string" } }
+        }
+      }
+    },
+    "coding_standards": {
+      "php": {
+        "strict_types": true,
+        "psr12_style": true,
+        "no_framework_required": true,
+        "composer_autoload": "psr-4",
+        "error_handling": "exceptions + centralized handler",
+        "logging": "storage/logs/app.log"
+      },
+      "js": {
+        "no_framework": true,
+        "use_fetch_api": true,
+        "polling": "setInterval + afterTimestamp",
+        "xss_safety": "escape user messages on render"
+      }
+    },
+    "deliverables": {
+      "must_create": [
+        "composer.json",
+        ".env.example",
+        "README.md",
+        "public/index.php",
+        "scripts/seed.php"
+      ],
+      "readme_instructions": [
+        "composer install",
+        "copy .env.example to .env",
+        "set MONGODB_URI and MONGODB_DB",
+        "php -S localhost:8000 -t public",
+        "php scripts/seed.php",
+        "admin login credentials from seed"
+      ]
+    }
+  }

@@ -1,0 +1,19 @@
+{
+    "name": "toyshop/app",
+    "description": "ToyShop Premium e-commerce with Admin panel and Live support",
+    "type": "project",
+    "require": {
+        "php": ">=8.2",
+        "ext-mongodb": "*",
+        "vlucas/phpdotenv": "^5.6",
+        "mongodb/mongodb": "^2.0"
+    },
+    "autoload": {
+        "psr-4": {
+            "ToyShop\\": "src/"
+        }
+    },
+    "config": {
+        "optimize-autoloader": true
+    }
+}
